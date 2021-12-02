@@ -41,12 +41,9 @@ init(State) ->
 
 -spec do(rebar_state:t()) -> {ok, rebar_state:t()} | {error, term()}.
 do(State) ->
-    case rebar3_hex:task_state(State) of
-        {ok, Task} ->
-            handle_task(Task);
-        {error, Reason} ->
-            ?RAISE(Reason)
-    end.
+    Opts = rebar3_hex:get_args(State),
+    Apps = rebar_state:project_apps(State),
+    handle_task(#{args => Opts, state => State, apps => Apps}).
 
 -spec format_error(any()) -> iolist().
 format_error(ErrList) when is_list(ErrList) ->
